@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
-import { Axios } from 'axios'
+
+import axios from 'axios';
+
+
 function Form({ getdata, bmi }) {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [alert, setAlert] = useState(true);
+
+  const [newData, setNewData] = useState([]);
 
   const onsubmit = (e) => {
     e.preventDefault();
@@ -16,27 +21,28 @@ function Form({ getdata, bmi }) {
       getdata(weight, height, name, age);
     }
   }
-  const bmiscore = { bmi }
+  // const bmiscore = { bmi } 
 
+  const data = {
+    name: name, 
+    age: age,
+    height: height, 
+    weight: weight,
+    bmi:(weight / (height * height)).toFixed(2)
 
+  } 
   const submitHandler = () => {
-    Axios.post('http://localhost:3002/api/insert/' , {
-    name: name ,
-    age : age ,
-    height : height ,
-    weight : weight ,
-    bmi :bmiscore
-    })
 
-    
-    console.log(name, age, height, weight, bmiscore, 'name age h w bmi');
-
+    axios.post('http://localhost:3001/api/insert/', data)
+      .then((res) => {
+        console.log("inserted")
+      })
+      .catch(err => console.log("Error: " + err));
   }
+
   return (
     <>
       <div className='container '>
-
-
         <form onSubmit={onsubmit}>
           <div className='bmi-form'>
             <div className="row">
@@ -71,7 +77,7 @@ function Form({ getdata, bmi }) {
                     required
                   />
                 </div>
-              </div>
+              </div>   
               <div className="col col-sm-6">
                 <div className="my-2">
                   <label className="form-label">Height(m) :</label>
@@ -93,9 +99,9 @@ function Form({ getdata, bmi }) {
             <button
               type="submit" className="btn btn-primary bmi-button" onClick={submitHandler} >GET BMI</button>
           </div>
-        </form>
+        </form>  
         {alert ? <div className='alert'>Enter valid data</div> : ''}
-      </div>
+      </div>  
     </>
   )
 }

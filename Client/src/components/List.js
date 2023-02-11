@@ -43,7 +43,7 @@ function List({list}) {
           </thead>
         {lists.map((item, index) => (
           <tbody >
-            <tr style={list === item.name ?  {backgroundColor:'mediumseagreen' } :  {backgroundColor: 'white'}}>
+            <tr key={index} style={list === item.name ?  {backgroundColor:'mediumseagreen' } :  {backgroundColor: 'white'}}>
               <td>{index + 1}</td>
               <td>{item.name}</td>
               {/* using entity no.for < symbol '&#60;' */}
